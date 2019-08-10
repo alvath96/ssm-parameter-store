@@ -16,6 +16,13 @@ class EC2ParameterStore:
         for k, v in parameter_dict.items():
             os.environ.setdefault(k, v)
 
+    def set_env_by_paths(self, paths):
+        for path in paths:
+            parameters = self.get_parameters_by_path(path, recursive=True)
+            
+            for k, v in parameters.items():
+                os.environ[k] = v
+
     def _get_paginated_parameters(self, client_method, strip_path=True, **get_kwargs):
         next_token = None
         parameters = []
